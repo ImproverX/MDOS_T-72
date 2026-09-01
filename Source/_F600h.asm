@@ -4,7 +4,7 @@
 	.ORG    S_FONT
 	#include "_EF00h.fnt"
 ;
-	; (0F664h)
+	; (0F65Ch)
 L_F600:	PUSH PSW	; сюда прилетит при первом прерывании
 	PUSH D
 	PUSH H
@@ -45,6 +45,9 @@ L_F640:	MVI  A, 08Ah	; работаем с клавиатурой
 	XRA  A
 	OUT     003h
 	IN      002h
+DYSPK:	CPI	0	; <- записывается предыдущее значение
+	STA	DYSPK+1
+	JNZ	L_F762	; против дребезга клавиатуры
 	INR  A
 	JZ      L_F762	; > клавиши не нажаты
 	PUSH B
