@@ -221,9 +221,9 @@ L_BE9C:	MVI  A, 0FFh
 	STA     L_DE80
 	JMP     L_DA4D	; >>>> запуск МДОС
 ;
-L_BED8: .db "K MicroDOS  Vers. 3.1m04"
+L_BED8: .db "K MicroDOS  Vers. 3.1m042"
 	.db 00Dh, 00Ah
-	.db "    25.02.21$"
+	.db "   31.08.26$"
 ;
 L_BEFF: .db 083h	; номер операции расширенной БДОС
 	.dw M_E049	; адрес дескриптора операции ???
@@ -1083,7 +1083,7 @@ L_C57A: POP  B
 P_C583: LHLD    L_DE5B	; вызов из PCHL (2)
 	MOV  A, M
 	RAL
-	JNC     L_C66B
+	JNC     L_C66B	; < 80h
 	RAR
 	ANI     07Fh
 	INX  H
@@ -1095,7 +1095,7 @@ P_C583: LHLD    L_DE5B	; вызов из PCHL (2)
 	MOV  C, L
 	LXI  H, L_C5A7	; -- ссылки для PCHL (2)
 	CPI     070h
-	JC      L_C4D1
+	JC      L_C4D1	; < 70h / F0h
 	SBI     070h
 	LXI  H, L_C5B3	; -- ссылки для PCHL (2)
 	JMP     L_C4D1
@@ -1941,15 +1941,11 @@ L_CBCA: XTHL
 	POP  D
 	RET
 ;
-L_CBD1: .dw 02710h	; ????
-	.db 0E8h	; <ш> - |■■■ ■   | (offset 0ED3h)
-	.db 003h	; <_> - |      ■■| (offset 0ED4h)
-	.db 064h	; <d> - | ■■  ■  | (offset 0ED5h)
-	.db 000h	; <_> - |	| (offset 0ED6h)
-	.db 00Ah	; <_> - |    ■ ■ | (offset 0ED7h)
-	.db 000h	; <_> - |	| (offset 0ED8h)
-	.db 001h	; <_> - |       ■| (offset 0ED9h)
-	.db 000h	; <_> - |	| (offset 0EDAh)
+L_CBD1: .dw 02710h	; = 10000
+	.dw 003E8h	; = 1000
+	.dw 00064h	; = 100
+	.dw 0000Ah	; = 10
+	.dw 00001h	; = 1
 ;
 L_CBDB: MOV  A, H
 	CALL    L_CBE0
