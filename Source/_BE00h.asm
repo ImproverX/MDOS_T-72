@@ -223,7 +223,7 @@ L_BE9C:	MVI  A, 0FFh
 ;
 L_BED8: .db "K MicroDOS  Vers. 3.1m042"
 	.db 00Dh, 00Ah
-	.db "   31.08.26$"
+	.db "   15.09.26$"
 ;
 L_BEFF: .db 083h	; номер операции расширенной БДОС
 	.dw M_E049	; адрес дескриптора операции ???
@@ -444,16 +444,16 @@ L_C0BD: LDA     M_E117	; <<<<<<
 	JMP     B_E218
 ;
 L_C0E5: MOV  C, M
-	LXI  H, L_C165
-	CALL    L_C3FF
+	LXI  H, L_C165	; список буквенных команд Т-72
+	CALL    L_C3FF	; поиск
 	LXI  H, L_C16C
-	JNC     L_C0FC
+	JNC     L_C0FC	; >> не нашли
 	PUSH PSW
 	PUSH H
-	CALL    L_C399
+	CALL    L_C399	; проверка параметров команды
 	POP  H
 	POP  PSW
-	JMP     L_C4D1
+	JMP     L_C4D1	; выполнение
 ;
 L_C0FC: CALL    L_C12A
 	LDA     L_DF99
