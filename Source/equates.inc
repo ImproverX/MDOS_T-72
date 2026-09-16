@@ -1,41 +1,28 @@
 ;	#DEFINE NoFDD	; раскоментировать для компилирования без драйвера НГМД
 ;	#DEFINE NoHDD	; раскоментировать для компилирования без драйвера НЖМД
 ;
-	; Шрифты -- в памяти Вектора (0EF5Ch-0F65Bh)
-	; БСВВ   -- в памяти Вектора (0F65Ch-0FFxxh)
-S_BIOS	.EQU        0F65Ch	; адрес начала блока
-S_FONT	.EQU        S_BIOS-0700h
-LenBIOS .EQU        3160	; размер со шрифтом (упакованный)
+S_BIOS	.EQU        0F65Ch	; БСВВ   -- в памяти Вектора (0F65Ch-0FFxxh)
+S_FONT	.EQU        S_BIOS-0700h	; Шрифты -- в памяти Вектора (0EF5Ch-0F65Bh)
+S_BDOS	.EQU        0E200h	; БДОС -- в памяти Вектора (0E200h-...) +368h байт на дисковые буферы
+S_MDOS	.EQU        0BE6Ch	; МикроДОС с программой предварительной настройки -- на КД (банк 0 как ОЗУ A000-DFFFh)
 ;
-	; БДОС -- в памяти Вектора (0E200h-...) +368h байт на дисковые буферы
-S_BDOS	.EQU        0E200h	; адрес начала
+LenBIOS .EQU        3167	; размер со шрифтом (упакованный)
+;
 #ifdef NoFDD			; размер (упакованный)
-  #ifdef NoHDD
-LenBDOS	.EQU        1395	; (без НГМД и НЖМД)
-  #else
-LenBDOS	.EQU        1797	; (без НГМД)
+  #ifdef NoHDD			; (без НГМД и НЖМД)
+LenBDOS	.EQU        1397
+LenMDOS	.EQU        7215
+  #else				; (без НГМД)
+LenBDOS	.EQU        1799
+LenMDOS	.EQU        7221
   #endif
 #else
-  #ifdef NoHDD
-LenBDOS	.EQU        1840	; (без НЖМД)
-  #else
-LenBDOS	.EQU        2238	; (есть всё)
-  #endif
-#endif
-;
-	; МикроДОС с программой предварительной настройки -- на КД (банк 0 как ОЗУ A000-DFFFh)
-S_MDOS	.EQU        0BE6Ch	; адрес начала
-#ifdef NoFDD			; размер (упакованный)
-  #ifdef NoHDD
-LenMDOS	.EQU        7215	; (без НГМД и НЖМД)
-  #else
-LenMDOS	.EQU        7221	; (без НГМД)
-  #endif
-#else
-  #ifdef NoHDD
-LenMDOS	.EQU        7221	; (без НЖМД)
-  #else
-LenMDOS	.EQU        7225	; (есть всё)
+  #ifdef NoHDD			; (без НЖМД)
+LenBDOS	.EQU        1842
+LenMDOS	.EQU        7221
+  #else				; (есть всё)
+LenBDOS	.EQU        2241
+LenMDOS	.EQU        7225
   #endif
 #endif
 ;
