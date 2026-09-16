@@ -1,4 +1,5 @@
 	#include "equates.inc"
+	#include "_E200h.exp"	; создаётся при компиляции "_E200h.asm"
 	#DEFINE F_EEFF S_FONT-1	; начало таблицы экранного шрифта -1
 ;
 	.ORG    S_FONT
@@ -1690,9 +1691,9 @@ L_FFB7:	.db 020h	; < > - |  ■     | (offset 0AB7h)
 	.db 020h	; < > - |  ■     | (offset 0ABCh)
 	.db 020h	; < > - |  ■     | (offset 0ABDh)
 	.db 020h	; < > - |  ■     | (offset 0ABEh)
-L_FFBF:	.db 000h	; <_> - |        | (offset 0ABFh) ; цвет фона для палитры
-L_FFC0:	.db 028h	; <(> - |  ■ ■   | (offset 0AC0h) ; цвет текста для палитры
-L_FFC1:	.db 0A0h	; <а> - |■ ■     | (offset 0AC1h) ; РУС/ЛАТ и СС
+L_FFBF:	.db 000h	; цвет фона для палитры
+L_FFC0:	.db 028h	; цвет текста для палитры
+L_FFC1:	.db 0A0h	; РУС/ЛАТ и СС
 L_FFC2:	.db 000h	; <_> - |        | (offset 0AC2h)
 	.db 000h	; <_> - |        | (offset 0AC3h)
 M_FFC4:	.db 032h	; скорость записи на магнитную ленту
@@ -1700,5 +1701,14 @@ M_FFC5:	.db 04Bh	; скорость считывания с магнитной �
 L_FFC6:	.db 001h	; <_> - |       ■| (offset 0AC6h)
 L_FFC7:	.db 000h	; <_> - |        | (offset 0AC7h)
 L_FFC8:	.db 000h	; <_> - |        | (offset 0AC8h)
+D_FFC9: .db 004h	; [FFC9h] количество дисков в системе
+D_HDDD:	.dw 00000h	; [FFCAh] количество дискет НЖМД, если 0 -- нет НЖМД
+D_DrvA: .dw T_DrvA	; [FFCCh]
+D_DrvB: .dw T_DrvB	; [FFCEh]
+#ifndef NoFDD
+D_FRAM:	.db 0BCh	; [FFD0h] старший байт верхней границы памяти
+#else
+D_FRAM:	.db 0C0h
+#endif
 ;
 	.END
