@@ -4,25 +4,25 @@
 S_BIOS	.EQU        0F65Ch	; БСВВ   -- в памяти Вектора (0F65Ch-0FFxxh)
 S_FONT	.EQU        S_BIOS-0700h	; Шрифты -- в памяти Вектора (0EF5Ch-0F65Bh)
 S_BDOS	.EQU        0E200h	; БДОС -- в памяти Вектора (0E200h-...) +368h байт на дисковые буферы
-S_MDOS	.EQU        0BE6Ch	; МикроДОС с программой предварительной настройки -- на КД (банк 0 как ОЗУ A000-DFFFh)
+S_MDOS	.EQU        0BE51h	; МикроДОС с программой предварительной настройки -- на КД (банк 0 как ОЗУ A000-DFFFh)
 ;
 LenBIOS .EQU        3167	; размер со шрифтом (упакованный)
 ;
 #ifdef NoFDD			; размер (упакованный)
   #ifdef NoHDD			; (без НГМД и НЖМД)
 LenBDOS	.EQU        1397
-LenMDOS	.EQU        7215
+LenMDOS	.EQU        7221
   #else				; (без НГМД)
 LenBDOS	.EQU        1799
-LenMDOS	.EQU        7221
+LenMDOS	.EQU        7227
   #endif
 #else
   #ifdef NoHDD			; (без НЖМД)
 LenBDOS	.EQU        1842
-LenMDOS	.EQU        7221
+LenMDOS	.EQU        7244
   #else				; (есть всё)
 LenBDOS	.EQU        2241
-LenMDOS	.EQU        7225
+LenMDOS	.EQU        7248
   #endif
 #endif
 ;
