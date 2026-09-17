@@ -1,27 +1,7 @@
 	#include "equates.inc"
-	.ORG    S_MDOS	;0BE6Ch
+	.ORG    S_MDOS	;0BE51h
 ;
 	#DEFINE M_BC00 0BC00h
-	#DEFINE M_E049 0E049h	; БУФ / дескриптор операции расширенной БДОС (31 байт)
-	#DEFINE M_E06A 0E06Ah
-	#DEFINE M_E06B 0E06Bh
-	#DEFINE M_E06C 0E06Ch
-	#DEFINE M_E06D 0E06Dh
-	#DEFINE M_E0ED 0E0EDh
-	#DEFINE M_E10E 0E10Eh
-	#DEFINE M_E10F 0E10Fh
-	#DEFINE M_E110 0E110h
-	#DEFINE M_E111 0E111h
-	#DEFINE M_E112 0E112h
-	#DEFINE M_E114 0E114h
-	#DEFINE M_E117 0E117h
-	#DEFINE M_E11A 0E11Ah	; тут сохраняется указатель стека
-	#DEFINE M_E176 0E176h	; SP
-	#DEFINE M_E1BC 0E1BCh	; SP
-	#DEFINE M_E1BD 0E1BDh
-	#DEFINE M_E1С9 0E1C9h	; SP
-	#DEFINE M_E1D3 0E1D3h	; SP
-;
 	#DEFINE B_E21E 0E21Eh	; запуск патча для B_E212
 ;
 	#DEFINE L_DE74 L_DE67+13
@@ -108,7 +88,27 @@
 	#DEFINE L_DFC4 L_DE80+144h
 	#DEFINE L_DFC6 L_DE80+146h
 	#DEFINE L_DFC8 L_DE80+148h
-	#DEFINE L_DFC9 L_DE80+149h
+	#DEFINE L_DFC9 L_DE80+149h	; 128 байт
+;
+	#DEFINE M_E049 0E049h	; БУФ / дескриптор операции расширенной БДОС (31 байт)
+	#DEFINE M_E06A 0E06Ah	; 1
+	#DEFINE M_E06B 0E06Bh	; 1
+	#DEFINE M_E06C 0E06Ch	; 1
+	#DEFINE M_E06D 0E06Dh	; 128
+	#DEFINE M_E0ED 0E0EDh	; 33
+	#DEFINE M_E10E 0E10Eh	; 1
+	#DEFINE M_E10F 0E10Fh	; 1
+	#DEFINE M_E110 0E110h	; 1
+	#DEFINE M_E111 0E111h	; 1
+	#DEFINE M_E112 0E112h	; 2
+	#DEFINE M_E114 0E114h	; 3
+	#DEFINE M_E117 0E117h	; 3
+	#DEFINE M_E11A 0E11Ah	; тут сохраняется указатель стека
+	#DEFINE M_E176 0E176h	; SP
+	#DEFINE M_E1BC 0E1BCh	; SP, +DB
+	#DEFINE M_E1BD 0E1BDh	; dw
+	#DEFINE M_E1С9 0E1C9h	; SP
+	#DEFINE M_E1D3 0E1D3h	; SP
 ;
 L_BE00: LXI  H, 00000h	; очистка памяти L_DE67..0E1FFh
 	LXI  SP,B_E200
@@ -352,7 +352,7 @@ LsBF42:	.db "D  *  "
 ;
 L_BED8: .db "K MicroDOS  Vers. 3.1m043"
 	.db 00Dh, 00Ah
-	.db "   16.09.26$"
+	.db "   17.09.26$"
 ;
 	.ORG    0C000h
 L_C000: JMP     L_C430	; Холодный старт.
@@ -4622,10 +4622,10 @@ L_DE01: .db 000h	; <_> - |        | (offset 2101h)
 	.db 000h	; <_> - |        | (offset 210Fh)
 	.db 000h	; <_> - |        | (offset 2110h)
 L_DE11: .db 000h	; <_> - |        | (offset 2111h)
-	.dw L_DFC9
+	.dw M_E06D	;L_DFC9
 	.dw M_E049
 L_DE16: .db 000h	; <_> - |        | (offset 2116h)
-	.dw M_E06D
+	.dw L_DFC9	;M_E06D
 	.dw M_E0ED
 L_DE1B: .db 000h	; <_> - |        | (offset 211Bh)
 L_DE1C: .db 000h	; <_> - |        | (offset 211Ch)
