@@ -4,7 +4,7 @@
 Является доработанной и улучшенной версией [ОС Т-72](https://caglrc.cc/scalar/ware/630/) (Автор: Центр «Тень»,  Терентьев С.В., 1995 г.).
 Подробнее о системе [тут](https://zx-pk.ru/threads/9488-vektor-06ts-operatsionnye-sistemy.html).
 
-Для сборки из исходников требуется компилятор TASM и упаковщик [LZSA](https://github.com/emmanuel-marty/lzsa).
+Для сборки из исходников требуется компилятор [TASM](http://old-dos.ru/index.php?page=files&mode=files&do=show&id=1385) и упаковщик [LZO28](https://zx-pk.ru/threads/29679-szhatie-dannykh.html?p=1231990&viewfull=1#post1231990).
 
 Бинарные файлы откомпилированы в вариантах:<br>
 os-t72f.rom -- без поддержки жёсткого диска<br>
