@@ -11,18 +11,18 @@ LenBIOS .EQU        3097	; _F6 -- размер со шрифтом (упаков
 #ifdef NoFDD			; размер (упакованный)
   #ifdef NoHDD			; (без НГМД и НЖМД)
 LenBDOS	.EQU        1364	; _E2
-LenMDOS	.EQU        7104	; _BE
+LenMDOS	.EQU        7103	; _BE
   #else				; (без НГМД)
 LenBDOS	.EQU        1759	; _E2
-LenMDOS	.EQU        7110	; _BE
+LenMDOS	.EQU        7109	; _BE
   #endif
 #else
   #ifdef NoHDD			; (без НЖМД)
 LenBDOS	.EQU        1801	; _E2
-LenMDOS	.EQU        7127	; _BE
+LenMDOS	.EQU        7126	; _BE
   #else				; (есть всё)
 LenBDOS	.EQU        2190	; _E2
-LenMDOS	.EQU        7131	; _BE
+LenMDOS	.EQU        7130	; _BE
   #endif
 #endif
 ;
