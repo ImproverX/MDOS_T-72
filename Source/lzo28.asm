@@ -1,5 +1,6 @@
-;LZO28 unpacker for 8080, 70-92 bytes
-;Ivan Gorodetsky 2026-11-19
+;LZO28 unpacker for 8080, Ivan Gorodetsky 
+;v1 2026-11-19 64-92 bytes
+;v2 2026-11-21 63-90 bytes, unified version, slightly faster and shorter
 ;
 ; lxi h,SrcAdr
 ; lxi d,DestAdr
@@ -8,6 +9,8 @@
 
 ;option -r
 ;#define BACKWARD
+;option -s
+;#define SHORT_LEN
 ;option -w
 ;#define SHORT_WIN
 
@@ -40,9 +43,8 @@ LZO28_MainLoop:
         ana     c
         jz      LZO28_Link
         dcr     a
-        jz      LZO28_LitLong
         mov     b, a
-        .db     0CAh
+        jnz     LZO28_LitCopy
 LZO28_LitLong:
         mov     b, m
         NEXT_HL
@@ -57,36 +59,44 @@ LZO28_LDIR1:
 LZO28_Link:
         mvi     a, 01111000b
         ana     c
+#ifdef SHORT_LEN
+        rz
+#endif
         rrc
         rrc
         rrc
+#ifndef SHORT_LEN
         jnz     LZO28_ReadOff
-        mov     a, m
+        ora     m
         NEXT_HL
-        ora     a
         rz
 LZO28_ReadOff:
+#endif
         mov     b, a
         xra     a
         ora     c
         jm      LZO28_CopyLink
-#ifndef SHORT_WIN
-        mvi     a, OFF_HI_1B
-        sta     LZO28_CopyLink+3
         mov     a, m
         NEXT_HL
+#ifndef SHORT_WIN
         ora     a
 #ifdef BACKWARD
         jm      LZO28_FarOff
 #else
         jp      LZO28_FarOff
 #endif
-#else
-        mov     a, m
-        NEXT_HL
 #endif
 LZO28_ShortOff:
+#ifdef SHORT_WIN
         sta     LZO28_CopyLink+2
+#else
+        push    h
+        mvi     h, OFF_HI_1B
+        mov     l, a
+LZO28_Off:
+        shld    LZO28_CopyLink+2
+        .db     0FEh
+#endif
 LZO28_CopyLink:
         push    h
         lxi     h, OFF_2B
@@ -103,7 +113,6 @@ LZO28_LDIR2:
         jnz     LZO28_LDIR2
         pop     h
         jmp     LZO28_MainLoop
-
 #ifndef SHORT_WIN
 LZO28_FarOff:
 #ifdef BACKWARD
@@ -111,8 +120,10 @@ LZO28_FarOff:
 #else
         ori     80h
 #endif
-        sta     LZO28_CopyLink+3
-        mov     a, m
+        mov     c, m
         NEXT_HL
-        jmp     LZO28_ShortOff
+        push    h
+        mov     l, c
+        mov     h, a
+        jmp     LZO28_Off
 #endif
