@@ -352,7 +352,7 @@ LsBF42:	.db "D  *  "
 ;
 L_BED8: .db "K MicroDOS  Vers. 3.1m043"
 	.db 00Dh, 00Ah
-	.db "   20.11.26$"
+	.db "   23.11.26$"
 ;
 	.ORG    0C000h
 L_C000: JMP     L_C430	; Холодный старт.
