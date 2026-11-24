@@ -60,6 +60,6 @@ L_015X:	MVI  C, 01Fh	; = очистить экран
 	CZ      0E21Bh	; форматирование КД ----
 	JMP     S_MDOS	; ========>>>>>>>>>>>>
 ;
-	#include "LZO28.asm"
+	#include "LZO28_f.asm"
 ;
 L_MDOS:	.END
