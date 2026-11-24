@@ -1,6 +1,5 @@
-;LZO28 unpacker for 8080, Ivan Gorodetsky 
-;v1 2026-11-19 64-92 bytes
-;v2 2026-11-21 63-90 bytes, unified version, slightly faster and shorter
+;LZO28 fast unpacker for 8080, Ivan Gorodetsky 
+;v2 2026-11-23 111-143 bytes
 ;
 ; lxi h,SrcAdr
 ; lxi d,DestAdr
@@ -43,13 +42,28 @@ LZO28_MainLoop:
         ana     c
         jz      LZO28_Link
         dcr     a
-        mov     b, a
         jnz     LZO28_LitCopy
 LZO28_LitLong:
-        mov     b, m
+        ora     m
         NEXT_HL
+        jnz     LZO28_LitCopy
+        stc
 LZO28_LitCopy:
+        rar
+        mov     b, a
+        jnc     LZO28_LDIR1
+        mov     a, m
+        stax    d
+        NEXT_HL
+        NEXT_DE
+        xra     a
+        ora     b
+        jz      LZO28_Link
 LZO28_LDIR1:
+        mov     a, m
+        stax    d
+        NEXT_HL
+        NEXT_DE
         mov     a, m
         stax    d
         NEXT_HL
@@ -93,9 +107,8 @@ LZO28_ShortOff:
         push    h
         mvi     h, OFF_HI_1B
         mov     l, a
-LZO28_Off:
         shld    LZO28_CopyLink+2
-        .db     0FEh
+        jmp     LZO28_CopyLink+4
 #endif
 LZO28_CopyLink:
         push    h
@@ -104,13 +117,35 @@ LZO28_CopyLink:
         inx     h
 #endif
         dad     d
+        xra     a
+        ora     b
+        rar
+        mov     b, a
+        jnc     LZO28_LDIR2
+        ora     a
+        jz      LZO28_copy1
+        mov     a, m
+        stax    d
+        NEXT_HL
+        NEXT_DE
 LZO28_LDIR2:
+        mov     a, m
+        stax    d
+        NEXT_HL
+        NEXT_DE
         mov     a, m
         stax    d
         NEXT_HL
         NEXT_DE
         dcr     b
         jnz     LZO28_LDIR2
+        pop     h
+        jmp     LZO28_MainLoop
+LZO28_copy1:
+        mov     a, m
+        stax    d
+        NEXT_HL
+        NEXT_DE
         pop     h
         jmp     LZO28_MainLoop
 #ifndef SHORT_WIN
@@ -125,5 +160,6 @@ LZO28_FarOff:
         push    h
         mov     l, c
         mov     h, a
-        jmp     LZO28_Off
+        shld    LZO28_CopyLink+2
+        jmp     LZO28_CopyLink+4
 #endif
