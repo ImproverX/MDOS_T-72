@@ -15,7 +15,7 @@ L_0100: DI
 	OUT     010h	; отключаем КД10, если он вдруг был подключён
 	OUT     011h	; и отключаем КД11
 	LXI  SP,00100h
-	LXI  H, L_BIOS	; откуда (L_2C00)
+	LXI  B, L_BIOS	; откуда (L_2C00)
 	LXI  D, S_FONT	; куда (0EF00h-0FFFFh)
 	CALL    UNPACK	; переброска (это шрифт и БСВВ)
 	LXI  H,	0A001h	; проверка наличия квази-диска 11
@@ -33,10 +33,10 @@ L_0100: DI
 	MVI  A, 004h	; число дисков
 	PUSH PSW	; сохраняем в стек флаги
 	CALL    0F800h	; настройка БСВВ: включение КД + прерывания
-	LXI  H, L_MDOS	; откуда (L_0200)
+	LXI  B, L_MDOS	; откуда (L_0200)
 	LXI  D, S_MDOS	; куда (0BE00h-DFFFh)(банк 0 как ОЗУ A000-DFFFh)
 	CALL    UNPACK	; переброска (это МикроДОС)
-;;	INX  H		;<LXI  H, L_BDOS	; откуда (L_2400)
+	LXI  B, L_BDOS	; откуда (L_2400)
 	LXI  D, S_BDOS	; куда (0E200h-0E9FFh)
 	CALL    UNPACK	; переброска (это БДОС)
 	MVI  A, 0C3h	; JMP ...
@@ -60,6 +60,6 @@ L_015X:	MVI  C, 01Fh	; = очистить экран
 	CZ      0E21Bh	; форматирование КД ----
 	JMP     S_MDOS	; ========>>>>>>>>>>>>
 ;
-	#include "LZO28_f.asm"
+	#include "LZO28_s.asm"
 ;
 L_MDOS:	.END
